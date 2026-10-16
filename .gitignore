@@ -1,0 +1,43 @@
+# secrets
+.env
+*.env.local
+
+# backend
+backend/target/
+*.iml
+.idea/
+
+# frontend
+frontend/node_modules/
+frontend/dist/
+frontend/coverage/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+*.log
+
+# more secrets / credentials (keep the template)
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+secrets/
+
+# build output / caches
+build/
+out/
+frontend/.vite/
+*.tsbuildinfo
+hs_err_pid*
+
+# Office lock files
+~$*
+
+# defense report documents (kept local only)
+/NEXORA_*.docx
+/NEXORA_*.pdf

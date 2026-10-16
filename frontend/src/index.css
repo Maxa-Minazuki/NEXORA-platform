@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Montserrat", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-canvas: #F5F7FF;
+  --color-surface: #FFFFFF;
+  --color-ink: #20243A;
+  --color-muted: #7B8198;
+  --color-line: #E8EAF4;
+
+  --color-primary: #6C63FF;
+  --color-primary-soft: #EEEDFF;
+  --color-primary-strong: #5A50F0;
+  --color-sky: #4385FF;
+  --color-sky-soft: #E8F0FF;
+  --color-teal: #26C6B8;
+  --color-teal-soft: #E2F8F6;
+  --color-peach: #FFB86B;
+  --color-peach-soft: #FFF3E5;
+  --color-rose: #FF7FA8;
+  --color-rose-soft: #FFEAF1;
+  --color-mint: #22B07D;
+  --color-mint-soft: #E3F7EF;
+  --color-danger: #E5484D;
+  --color-danger-soft: #FDECEC;
+
+  --shadow-card: 0 1px 2px rgba(32, 36, 58, 0.04), 0 8px 24px -12px rgba(32, 36, 58, 0.10);
+  --shadow-pop: 0 12px 40px -12px rgba(32, 36, 58, 0.28);
+
+  --animate-rise: rise 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-fade: fade 0.25s ease-out both;
+  --animate-slide-in: slide-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slide-in {
+    from { opacity: 0; transform: translateX(24px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+}
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    @apply bg-canvas text-ink font-sans antialiased;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4 { @apply font-display; letter-spacing: -0.01em; }
+  ::selection { background: rgba(108, 99, 255, 0.18); }
+  :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; border-radius: 8px; }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-line bg-surface shadow-card;
+  }
+  .glass {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: saturate(160%) blur(14px);
+    -webkit-backdrop-filter: saturate(160%) blur(14px);
+  }
+  .input {
+    @apply w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-muted/70
+      transition focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none disabled:bg-canvas disabled:text-muted;
+  }
+  /* Grid items default to min-width:auto and would let long content widen the page on phones. */
+  .grid > * { min-width: 0; }
+  .label { @apply mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted; }
+  .stagger > * { animation: var(--animate-rise); }
+  .stagger > *:nth-child(2) { animation-delay: 40ms; }
+  .stagger > *:nth-child(3) { animation-delay: 80ms; }
+  .stagger > *:nth-child(4) { animation-delay: 120ms; }
+  .stagger > *:nth-child(5) { animation-delay: 160ms; }
+  .stagger > *:nth-child(6) { animation-delay: 200ms; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

@@ -1,0 +1,5 @@
+package com.nexora.workflow.mediator;
+
+public enum WorkflowSignal {
+    SUBMIT_REQUESTED, DECISION_REQUESTED, ROUTE_PLANNED, STEPS_UPDATED, STATE_CHANGED, HISTORY_RECORDED, PUBLISHED
+}

@@ -1,0 +1,124 @@
+spring:
+  application:
+    name: nexora
+  profiles:
+    default: dev
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+          batch_size: 50
+        order_inserts: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    placeholders:
+      demo_data: "true"
+      demo_flight_days: "14"
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: always
+  mail:
+    host: ${SMTP_HOST:}
+    port: ${SMTP_PORT:587}
+    username: ${SMTP_USERNAME:}
+    password: ${SMTP_PASSWORD:}
+    properties:
+      mail.smtp.auth: ${SMTP_AUTH:true}
+      mail.smtp.starttls.enable: ${SMTP_STARTTLS:true}
+  web:
+    locale: kk
+    locale-resolver: fixed
+  mvc:
+    async:
+      request-timeout: -1
+
+server:
+  port: ${SERVER_PORT:8080}
+  error:
+    include-message: never
+    include-stacktrace: never
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+    session:
+      timeout: 8h
+      cookie:
+        http-only: true
+        same-site: lax
+        secure: ${COOKIE_SECURE:false}
+        name: NEXORA_SESSION
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+  health:
+    # SMTP is optional (demo mode); e-mail availability is reported per channel in the notification center.
+    mail:
+      enabled: false
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: NEXORA Integrated Management Platform
+    version: 1.0.0
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+nexora:
+  platform-name: NEXORA
+  business-timezone: ${BUSINESS_TIMEZONE:Asia/Almaty}
+  booking-hold-minutes: ${BOOKING_HOLD_MINUTES:15}
+  appointment-slot-minutes: 30
+  manager-approval-threshold: 250000.00
+  additional-approval-threshold: 1500000.00
+  low-stock-policy: ${LOW_STOCK_POLICY:minimum-level}
+  flight-schedule-horizon-days: 14
+  email-enabled: ${EMAIL_ENABLED:false}
+  email-from: ${EMAIL_FROM:no-reply@nexora.local}
+  # Restore the five demo accounts (password, active flag, role) at startup. Never deletes data.
+  demo-accounts-sync: ${DEMO_ACCOUNTS_SYNC:true}
+
+logging:
+  level:
+    root: INFO
+    com.nexora: ${APP_LOG_LEVEL:INFO}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3307}/${DB_NAME:nexora}?useSSL=false&allowPublicKeyRetrieval=true&connectionTimeZone=UTC&characterEncoding=UTF-8
+    username: ${DB_USERNAME:nexora}
+    password: ${DB_PASSWORD:}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: demo
+  datasource:
+    url: jdbc:mysql://${DB_HOST:mysql}:${DB_PORT:3306}/${DB_NAME:nexora}?useSSL=false&allowPublicKeyRetrieval=true&connectionTimeZone=UTC&characterEncoding=UTF-8
+    username: ${DB_USERNAME:nexora}
+    password: ${DB_PASSWORD:}
+server:
+  forward-headers-strategy: framework
